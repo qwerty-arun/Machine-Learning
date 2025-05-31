@@ -151,6 +151,12 @@ B-->C[Context Window];
    ## General
    - Applied for "AI essentials" course on Coursera. Seems worth it.
    - Revised some previous AI learnings, python syntax etc.
+
+   ## 31/5/25
+   - Wrote around 6-7 programs
+   - Transpose problem, flatten lists, divide the list into chunks, merge sorted lists into one, anagram strings, removing palindrome strings from sentence, reverse each word in strings.
+   - Learnt about tuples and dictionaries and basic operations
+   - Searched about projects which I can do using python. There are so many options!
 </details>
 
 <details>
