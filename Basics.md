@@ -184,4 +184,44 @@ B-->C[Context Window];
    ### Extra
    - Downloaded "Attention is all you need" paper.
    - Will read it some time.
+
+   ## 31/5/25
+   ### Inference
+   - To generate data, just predict one token at a time.
+   - Start with a token, feed it to a Neural Network, then we sample the tokens of highest probabilities from the probability vector.
+   - First Stage:
+   ```mermaid
+graph LR
+    A[91] -->|Neural Network| B(( Probablities ))
+    B -->|sample| C[860]
+   ```
+   - Second Stage:
+   ```mermaid
+   graph LR
+   A[91 and 860]--> |Neural Network| B(( Probablities ))
+   B-->|Sample| C[287]
+   ```
+   - Third Stage:
+   ```mermaid
+   graph LR
+   A[91, 860 and 287]--> |Neural Network| B(( Probablities ))
+   B-->|Sample| C[11579]
+   ```
+   - Fourth Stage:
+   ```mermaid
+   graph LR
+   A[91, 860, 287 and 11579]--> |Neural Network| B(( Probablities ))
+   B-->|Sample| C[13659]
+   ```
+   - As we can see, it is not the right answer. It is 3962.
+   ### Reproducing OpenAI's GPT-2
+   - GPT-2 was published in 2019
+   - Paper: "Language Models are Unsupervised Multitask Learners"
+   - 1.6 Billion parameters
+   - Maximum context length of 1024 tokens
+   - Trained on about 100 billion tokens
+   - [Reproducing GPT-2](https://github.com/karpathy/llm.c/discussions/677)
+   - Before the cost of training was about $800, now you can do it within $100. The reason is that datasets have become much better due to filtering mechanisms.
+   - You can't train the model on your laptop! You need a GPU. If you don't have one, you can rent one on [Lambda](lamdalabs.com)
+   - 
 </details>
