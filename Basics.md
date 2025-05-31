@@ -189,29 +189,21 @@ B-->C[Context Window];
    ### Inference
    - To generate data, just predict one token at a time.
    - Start with a token, feed it to a Neural Network, then we sample the tokens of highest probabilities from the probability vector.
-   - First Stage:
    ```mermaid
-graph LR
+    graph LR
     A[91] -->|Neural Network| B(( Probablities ))
     B -->|sample| C[860]
-   ```
-   - Second Stage:
-   ```mermaid
-   graph LR
-   A[91 and 860]--> |Neural Network| B(( Probablities ))
-   B-->|Sample| C[287]
-   ```
-   - Third Stage:
-   ```mermaid
-   graph LR
-   A[91, 860 and 287]--> |Neural Network| B(( Probablities ))
-   B-->|Sample| C[11579]
-   ```
-   - Fourth Stage:
-   ```mermaid
-   graph LR
-   A[91, 860, 287 and 11579]--> |Neural Network| B(( Probablities ))
-   B-->|Sample| C[13659]
+
+
+    D[91 and 860]--> |Neural Network| E(( Probablities ))
+    E-->|Sample| F[287]
+
+
+    N[91, 860 and 287]--> |Neural Network| G(( Probablities ))
+    G-->|Sample| H[11579]
+   
+    I[91, 860, 287 and 11579]--> |Neural Network| J(( Probablities ))
+    J-->|Sample| K[13659]
    ```
    - As we can see, it is not the right answer. It is 3962.
    ### Reproducing OpenAI's GPT-2
@@ -223,5 +215,11 @@ graph LR
    - [Reproducing GPT-2](https://github.com/karpathy/llm.c/discussions/677)
    - Before the cost of training was about $800, now you can do it within $100. The reason is that datasets have become much better due to filtering mechanisms.
    - You can't train the model on your laptop! You need a GPU. If you don't have one, you can rent one on [Lambda](lamdalabs.com)
-   - 
+   - Search "Biggest LLM base models"
+   - Llama 3 (2024): 405 billion parameters trained on 15 trillion tokens
+   - [Paper: "The Llama 3 Herd of Models"](https://arxiv.org/pdf/2407.21783)
+   - [Hyperbolic](app.hyperbolic.xyz)
+   - How is a base model different from an assistant? To a base model, you can't ask a question and expect a reply. Your prompt will be tokenized and fed to the Neural Network. Then, it is just autocompleting the next tokens. What you get is just a recollection of its past "memory" that it was previously trained on.
+   - These models are very good at memorization. Ask it a sentence on wikipedia and it will give you the rest. But, eventually, it will deviate.
+   - Prime the model about stuff from the future (a date after its knowledge cutoff) and see what happens.
 </details>
