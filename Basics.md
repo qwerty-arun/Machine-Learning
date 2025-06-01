@@ -35,7 +35,7 @@
 </details>
 
 <details>
-  <summary><strong>How I use LLMs by Andrew Karpathy on YT</strong></summary>
+  <summary><strong>How I use LLMs by Andrej Karpathy on YT</strong></summary>
 
   # [How I use LLMs -by Andrej Karpathy](https://www.youtube.com/watch?v=EWvNQjAaOHw)
   ## 23/5/25
