@@ -228,4 +228,40 @@ B-->C[Context Window];
    - How is a base model different from an assistant? To a base model, you can't ask a question and expect a reply. Your prompt will be tokenized and fed to the Neural Network. Then, it is just autocompleting the next tokens. What you get is just a recollection of its past "memory" that it was previously trained on.
    - These models are very good at memorization. Ask it a sentence on wikipedia and it will give you the rest. But, eventually, it will deviate.
    - Prime the model about stuff from the future (a date after its knowledge cutoff) and see what happens.
+     
+   ## 1/6/25
+   - The models have "in-context" learning abilities. By learning about the context, they can answer more questions about what comes next.
+   - Suppose, I give it 9 pairs of English words with its translation in Hindi and for the 10th pair, I just give it the English word. By recognizing the pattern in its input, it gives me the translation in Hindi for the 10th word.
+   - If you want a base model to work as an assistant, you can give it a two-person (human and chatbot) conversation turn by turn. And at the end, just give a prompt: a question. Now, it will take on the role of an assistant and then it will answer your question.
+   ### The "psychology" of a base model
+   - It is a token-level internet document simulator
+   - It is a probabilistic - you're going to get something else each time you run
+   - It "dreams" internet documents
+   - It can also recite some training documents verbatim from memory ("regulation")
+   - The parameters of the model are kind of like a lossy zip file of the internet -> a lot of useful world knowledge is stored in the parameters of the network
+   - You can already use it for applications (e.g. translation) by being clever with your prompts
+   ### Post-training
+   - We are now using a new data set of conversations
+   - This training period will be much shorter: in the matter of hours
+   - The pre-training stage will be around 3 months of time
+   - The data sets are made manually and fed into the same Neural Network
+   - Again, it is time to visualize `gpt-4o`on [Tiktokenizer](tiktokenizer.vercel.app)
+   ```
+   User: What is 2+2?
+   Assistant: 2+2=4
+   User: What if it was *?
+   Assistant: 2*2=4, same as 2+2!
+   ```
+   - The tokens are as follows:
+   ```
+   <|im_start|>user<|im_sep|>What is 2+2?<|im_end|><|im_start|>assistant<|im_sep|>2+2=4<|im_end|><|im_start|>user<|im_sep|>What if it was *?<|im_end|><|im_start|>assistant<|im_sep|>2*2=4, same as 2+2!<|im_end|><|im_start|>assistant<|im_sep|>
+   ```
+   - `im_start` stands for "imaginary monologue start", then it is `im_sep` and at last it is `im_end`. All of these are new and special.
+   - [2022 Paper](https://arxiv.org/abs/2203.02155): "Training language models to follow instructions with human feedback" or ***InstructGPT***
+   - [Hugging Face Interface Playground](https://huggingface.co/spaces/huggingface/inference-playground)
+   - Rules that AI organizations should follow for a chatbot to be: respectful, truthful, harmless, and helpful assistant etc.
+   - The assistant will take on the persona according to the dataset it is trained on. So, it is very important what kind of data we are dealing with.
+   - Now companies don't write conversations from scratch, they just use other LLMs which do it with ease. For example: UltraChat
+   - Asking a LLM is basically like asking an human labeler. A chatbot is like a simulation of a human labeler.
+   - When you ask a question, there is no infinite intelligence there. What you are getting in response is a statistical simulation of a labeler that was hired by OpenAI.
 </details>
