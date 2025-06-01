@@ -1,19 +1,52 @@
 # Tesla AI Day 2021
-## Computer Vision
-- There are 8 cameras positioned around the vehicle
-- It must process data in real time: 3D positions of lines, edges, curbs, traffic signs, traffic lights, car's orientation, position, depth, velocities etc.
-- 8 Cameras -> 3D "Vector Space"
-- Cars are synthetic animals and senses everything. Here, they are building from scratch
-- Images of 1280 x 960 12-Bit (HDR) @ 36Hz. They feed it to a Neural Network (Residual NN)
-- RegNets give out images of varities: high spatial resolution with low channel count to low spatial resolution with high channel count
-- Multi-Scale Feature Pyramic Fusion
-- Detection Head: For each pixel: Is there an object here? If there were an object here, what is its extend and attributes?
-- Multi-Task Learning "HydraNets": Object Detection, Traffic Lights Task, Lane Prediction etc.
-### Occupancy Tracker (Stitching Up Individual Per-Camera Road Edge Predictions Across Cameras & Time)
-- Problem 1: The across-camera fusion and the tracker are very difficult to write explicitly
-- Problem 2: Image space is not the right output space
-- Developed using C++
-- Per pixel, you need to have more accurate depth prediction
-### Multi-Cam Vector Space Predictions
-- Problem 1: How do you transform features from image space to vector space?
-- Problem 2: Vector space predictions require vector space datasets
+
+## Tesla's AI Vision 
+- Tesla views itself as significantly more than just an electric car company, with deep AI activity across hardware and software. They aim to be leaders in real-world AI and encourage engineers interested in solving real-world AI problems to join. They consider their cars "semi-sentient robots on wheels".
+
+## Autopilot Vision System 
+- The core of the Autopilot system starts with processing raw data from **eight cameras** positioned around the vehicle. A neural network processes this in real time to create a **vector space**, which is a three-dimensional representation containing all the necessary information for driving, such as the positions, orientations, depth, and velocities of objects like lines, edges, curbs, traffic signs, traffic lights, and cars. This system is likened to building a "synthetic animal" with in-house designed mechanical, electrical, and AI components. Early systems processed single images, evolving from feature extractors (ResNets, RegNets) and fusion networks (BiFPNs) feeding into task-specific heads to **HydraNets**, an architecture with a shared backbone branching into multiple heads for various tasks like object detection and lane prediction. This Hydranet structure improves efficiency, allows independent task development, and facilitates training workflows by caching features.
+
+## Multi-Camera Networks and Vector Space Output
+- Processing individual images proved insufficient for achieving Full Self-Driving (FSD), particularly for tasks like Smart Summon and accurately representing the environment in 3D space. Image-space predictions struggled with projecting accurately into vector space due as it required extremely precise depth information per pixel and failed to handle occlusions or objects spanning multiple camera views. The solution involved developing a single neural network that takes **all camera images simultaneously** and outputs directly into vector space. This requires transforming features from image space to vector space, a challenging task due to data-dependent factors like road surface slope and occlusions. A **transformer** using multi-headed self-attention is used for this transformation. Crucially, **camera calibration** data is integrated by transforming images into a synthetic virtual camera space. This approach dramatically improved the accuracy of vector space predictions, making them drivable, and enhanced object detection for multi-camera objects.
+
+## Video Networks and Temporal Fusion
+- Relying only on instantaneous data limits the system's ability to understand dynamic scenarios, such as tracking occluded objects or remembering road markings seen previously. To address this, **video modules** were integrated to fuse information temporally. This involves a **feature queue** that stores multi-scale features over time, incorporating the car's kinematics (velocity, acceleration). The queue uses both a **time-based mechanism** to handle temporary occlusions and a **space-based mechanism** to retain information over distance. A **spatial recurrent neural network (RNN)** is used as a video module, organising its hidden state in a 2D lattice and updating relevant parts based on the car's movement and visibility. This temporal memory significantly improves predictions, especially for occluded objects and long-term road geometry, and enabled vastly more accurate depth and velocity estimates, exceeding radar performance using only vision. The current architecture integrates these components: images are rectified, processed by feature backbones and fusion networks, transformed to vector space, cached in a feature queue, processed by a video module, and then decoded by task-specific heads.
+
+## Autopilot Planning and Control
+- The planning system takes the 3D vector space output and determines the car's trajectory to reach a destination safely, comfortably, and efficiently. Urban driving presents challenges due to non-convex and high-dimensional action spaces. Their approach is **hierarchical**: a coarse search finds a convex corridor, and continuous optimisation refines the path. The system searches through various physics-based manoeuvres to find the best option. It is critical to **plan for other agents** (cars, pedestrians) in the scene by running a planner for them, considering multiple potential futures for their actions. This allows the car to react appropriately and assertively when necessary. They are developing **learning-based methods** using neural networks and techniques like Monte Carlo Tree Search to efficiently handle complex, unstructured environments. The final planner is a hybrid of explicit algorithms and neural networks.
+
+## Data Labelling and Auto-labelling
+- Training the complex neural networks requires massive, high-quality datasets, particularly in vector space. Tesla moved data labelling **in-house**, building a team of over 1000 professional labelers. They transitioned from 2D image labelling to **3D/4D vector space labelling**, significantly increasing throughput. A key development is the **auto-labelling pipeline**, which uses offline neural networks and robotics algorithms to automatically label clips from the fleet, greatly increasing data generation scale beyond human capacity. This includes using implicit representations to reconstruct and label the road surface and static obstacles. A significant advantage of offline auto-labelling is **hindsight**, enabling highly accurate kinematic labels (velocity, acceleration) and tracking through occlusions. This process generates rich vector space datasets for training. Auto-labelling was crucial for rapidly generating data for specific challenging conditions needed to remove the dependency on radar.
+
+## Simulation
+- Simulation is heavily invested in for generating training data, especially for rare, hard-to-label, or closed-loop scenarios. It provides an endless stream of procedural data. Key requirements are **accurate sensor simulation** matching real-world camera properties and **realistic visual rendering** using techniques like rasterisation, ray tracing, and early-stage **neural rendering** to prevent models from overfitting on synthetic data. They use ML to identify network weaknesses and generate simulation data specifically targeting those failure points. A powerful capability is recreating real-world failures in simulation to ensure the system learns from them.
+
+## AI Compute Infrastructure
+- Scaling AI development demands vast compute for data generation, training, and evaluation. Tesla uses thousands of GPUs and CPU cores for offline data processing and thousands of actual FSD computers for evaluating network changes. For in-car inference, **latency and frame rate** are critical constraints. They develop an **AI compiler** to efficiently run models on the custom hardware. Their neural network training cluster currently comprises nearly 10,000 GPUs, one of the largest globally, but they require even more capacity.
+
+## Project Dojo
+- Dojo is a project to design and build a **purpose-built supercomputer for AI training**. The goal is to achieve superior performance, power efficiency, and cost-effectiveness compared to existing solutions. It features a distributed compute architecture with a high-bandwidth, low-latency 2D mesh fabric connecting compute elements. The core building block is a custom **D1 chip** (7nm, 50B transistors), designed entirely in-house, with 100% of its area dedicated to ML training and bandwidth. The D1 chip integrates 354 custom training nodes and has high I/O bandwidth. Multiple D1 chips are integrated into a **Training Tile**, a multi-chip module providing 9 petaflops of compute. Tiles are integrated with custom power delivery and cooling solutions. Tiles are seamlessly connected to form larger compute planes, up to an **ExaPOD** (1 exaflop in 10 cabinets). The system is modular and can be partitioned for different jobs. A strong compiler suite handles complex network mapping and parallelism. Dojo is real, with functional hardware tiles running networks. It aims to be significantly faster, more efficient, and smaller than current systems. Its primary application is training vast amounts of video data for the car's inference engine.
+
+## Tesla Bot (Optimus)
+- The Tesla Bot is a planned **humanoid robot prototype** leveraging Tesla's AI and hardware expertise developed for the car. It is intended to operate in a human world and perform **dangerous, repetitive, and boring tasks**. It will incorporate the Autopilot system, including cameras and the FSD computer. The aim is for it to understand instructions and perform tasks autonomously. It is designed with physical limitations (e.g., 5 mph speed) to ensure safety. The long-term vision has profound economic implications, potentially making physical work optional. The humanoid form factor is chosen to allow it to interact with environments and use tools designed for humans.
+
+*   **Additional Points from Q&A**:
+    *   Licensing the AI system to other car companies is a possibility.
+    *   Plans exist to expand the simulation platform to other vehicle systems beyond Autopilot.
+    *   While multimodal inputs (like audio) are relevant for a general robot, the car's primary challenge is vision-based navigation.
+    *   Training data includes diverse international scenes, but development focuses on the US first before extrapolating.
+    *   Synthetically created geometry is typically within a few centimeters of real-world geometry.
+    *   Tesla's manufacturing automation varies, but the robot project is a general AI/robotics effort, not solely for manufacturing.
+    *   Dojo's scaling involves advanced power delivery and liquid cooling leveraging Tesla's vehicle engineering expertise.
+    *   Dojo trains models for the car's inference engine but also models used in the auto-labelling pipeline.
+    *   The goal is end-to-end neural network training from vision to control, building on the current vector space interface.
+    *   Machine learning is generally avoided in other engineering processes at Tesla unless absolutely necessary due to its complexity.
+    *   Simulation data is used strategically alongside vast amounts of real-world data, with neural rendering aiming to bridge the "sim2real" gap.
+    *   The humanoid robot form factor is for general interaction and tool use; initial focus is on undesirable human jobs.
+    *   The system is improving, and previous issues like flickering object detections are being resolved with newer architectures and data.
+    *   The safety goal is to exceed human performance significantly, with Hardware 3 expected to achieve much greater safety and Hardware 4 aiming higher still.
+    *   They account for uncertainty in other agents' behaviour and are conservative when needed.
+    *   Continuous improvement across all components is needed; a current focus is ensuring all networks use surround video.
+    *   They do not currently use online or continuous learning in the car but deploy stable trained versions.
+    *   Concern about AI alignment exists, but Tesla is focused on developing "narrow AI" for specific, beneficial tasks.
+    *   Hardware 4 will include a next-generation camera, but current cameras are not yet limiting achieving FSD at higher-than-human safety.
