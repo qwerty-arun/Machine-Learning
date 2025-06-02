@@ -275,4 +275,21 @@ B-->C[Context Window];
    - Compare it with other LLMs answer (acting as a judge).
    - If there is a hallucination, then take the same question, add it to the dataset, the correct answer will now be: "I don't know".
    - Repeat this for a number of questions.
+   - If the model doesn't know, allow the model to search. Introduce a search token: `search_start` for example.
+   - When the model sees this, it will stop generating and goes to "search" the internet. It retrieves the text, copy paste into the context window.
+   - `Vague Recollection`: Knowledge in the parameters (something you read a month ago)
+   - `Working Memory`: Knowledge in the tokens of the context window
+   ### Knowledge of Self
+   - What model are you? Who built you? are not sensical questions.
+   - If model is not trained on such questions, it will give rubbish.
+   - Invisible tokens are there to remind models about its identity.
+   ### Models need tokens to think
+   - Human: "I buy 3 apples and 2 oranges. Each orange costs $2. The total cost of all the fruit is #13. What is the cost of apples?
+   - Assistant Answer-1: The answer is $3. This is because 2 oranges at $2 are $4 total. So the 3 apples cost $9, and therefore each apple is 9/3 = $3.
+   - Assistant Answer-2: The total cost of oranges is $4. 13-4 = 9, the cost of the 3 apples is $9. 9/3 = 3, so each apple costs $3. The answer is $3.
+   - For nano-gpt, there is fixed amount of computation happening for each token. We need to distribut our reasoning and our computation across many tokens because every single token is spending a finite amount of computation on it.
+   - The first answer is worse. In the first sentence itself, it has the answer and it will be stored in the context window. The later sentences justify that answer. There is no computation that is happening. If you train the model like this, what you are doing is making the model to basically guess the answer in a single token because of the finite amount of computation that can happen per token.
+   - Therefore, answer-2 is much better because the computation and reasoning is spread across tokens.
+   - You can force a model to produce an answer in a single token by literally asking for it. It will do it but the answer will be wrong.
+   - Models can "mentally think" or can use "code". It so happens that the intermediate steps can actually go wrong in the mentally thinking case. So you can ask the model to use code to verify the answer. 
 </details>
