@@ -264,4 +264,15 @@ B-->C[Context Window];
    - Now companies don't write conversations from scratch, they just use other LLMs which do it with ease. For example: UltraChat
    - Asking a LLM is basically like asking an human labeler. A chatbot is like a simulation of a human labeler.
    - When you ask a question, there is no infinite intelligence there. What you are getting in response is a statistical simulation of a labeler that was hired by OpenAI.
+
+   ## 2/6/25
+   ### Hallucinations
+   - You feed conversations like: User: "Who is `person name` ?" and Assistant: `person name` is a ..., and then ask completely random name, it will hallucinate.
+   - But the style will match with the training set it was given.
+   - How do we know what a model knows and what it doesn't know? We can probe it.
+   - [Meta Paper: The Llama 3 Herd of Models](https://arxiv.org/pdf/2407.21783) tells us how it dealt with hallucinations. Refer to "facuality" section.
+   - Prompt: A paragraph from an article. Ask the LLM to generate 3 factual questions based on it and also generate the correct answer.
+   - Compare it with other LLMs answer (acting as a judge).
+   - If there is a hallucination, then take the same question, add it to the dataset, the correct answer will now be: "I don't know".
+   - Repeat this for a number of questions.
 </details>
