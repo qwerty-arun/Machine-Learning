@@ -315,4 +315,29 @@ B-->C[Context Window];
    - How models are fine-tuned to get more accurate.
    - Model was trying different ways to think through the same problem. This in turn increased the response length. But on the other hand, it increased its accuracy.
    - [together.ai](https://api.together.xyz/signin?redirectUrl=%2Fplayground%2Fv2%2Fchat) playground hosts many different models.
+   - AI studio by google. Try it out.
+   - [AlphaGo](https://discovery.ucl.ac.uk/id/eprint/10045895/1/agz_unformatted_nature.pdf). See how it became a very good player at go.
+   - There are thousands of matches that it learns from. Basically you are imitating human players, therefore there is a certain limit of ELO rating after which you can't cross. This is the case for Suupervised Learning.
+   - But, in the case of Reinforcement Learning, it gets even better.
+   - Search about `move 37 alphago`, an extremely rare move that no human would play. But it turns out that it was a great move!
+
+   ### Reinforcement Learning in un-verifiable domains (RLHF: Reinforcement Learning from Human Feedback)
+   - [Human Preferences by OpenAI](https://arxiv.org/pdf/1909.08593)
+   - Make a model to write a joke. It turns out they are bad at it. Also, how to rate these jokes?
+   - Run RL as usual, 1000 prompts of 1000 rollouts. That is worse.
+   - Or create a neural net simulator (see LLM chart in Resources folder) of human simulators and let it rate the jokes.
+   #### Advantages of RLHF
+   - We can run RL, in arbitrary domains! Even for the unverifiable ones.
+   - There is something called the discriminator - generator gap.
+   - Write a story v/s Which of these 5 poems if best? Turns out, it is much easier to discriminate than to generate.
+   #### Downside
+   - We are doing RL with respect to a lossy simulation of humans. Can be misleading after many iterations.
+   - Results become non-sensical and also the reware system might rate it high.
+   - This happens when RL runs for too long. It finds a way to get really high scores with nonsensical results.
+   - Crop it after a certain time!
+   - Keeping track of LLMs: [lmarena.ai](lmarena.ai)
+   - [AI News](news.smol.ai)
+   - Where to find them: proprietary models (on respective websites of the LLM providers)
+   - Open weights models (DeepSeek, Llama): an inference provider
+   - We can run them locally! [LMStudio](lmstudio.ai) 
 </details>
