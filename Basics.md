@@ -291,5 +291,28 @@ B-->C[Context Window];
    - The first answer is worse. In the first sentence itself, it has the answer and it will be stored in the context window. The later sentences justify that answer. There is no computation that is happening. If you train the model like this, what you are doing is making the model to basically guess the answer in a single token because of the finite amount of computation that can happen per token.
    - Therefore, answer-2 is much better because the computation and reasoning is spread across tokens.
    - You can force a model to produce an answer in a single token by literally asking for it. It will do it but the answer will be wrong.
-   - Models can "mentally think" or can use "code". It so happens that the intermediate steps can actually go wrong in the mentally thinking case. So you can ask the model to use code to verify the answer. 
+   - Models can "mentally think" or can use "code". It so happens that the intermediate steps can actually go wrong in the mentally thinking case. So you can ask the model to use code to verify the answer.
+
+   ## 6/6/25
+   ### Models need tokens to think (Contd.)
+   - Models are very bad at counting. This also forces models to give answers in a single token.
+   - Tell it count the dots in `................................................................................` for example. Then compare it with answer from code. The code answer will be correct.
+   ### Models are not good with spelling
+   - Remember they see tokens (text chunks), not individual letter.
+   - Ask it to print every nth character from a string. For example, "Arithmetic" and every 3rd letter.
+   ### Random Stuff
+   - `What is bigger 9.11 or 9.9?` would previously result in 9.11 as the answer, but now it's correct.
+   - It seems like it is related to the verses on the Bible. The verse 9.11 would come after 9.99 and so on.
+
+   ### Reinforcement Learning and Supervised Finetuning (SFT model)
+   - Think of this as a textbook that you were reading at school. Similarly, the models need to go to "school". First learn theory, then solved problems. Then test yourself by solving unsolved problems. Then when you make error, you learn by reinforcement. Same thing goes with models.
+   - Exposition $\Leftrightarrow$ pretraining (background knowledge)
+   - Worked Problem $\Leftrightarrow$ supervised finetuning (problem + demonstrated solution, for imitation)
+   - Practice Problems $\Leftrightarrow$ Reinforcement Learning (prompts ot practice, trial and error until you reach the correct answer)
+   - Ask a question many times. Get like 20 solutions, only 5 of them might be right. So take the top solution (each right and short), train on it. Repeat many, many times.
+   - The model's parameter will get adjusted to this type of behaviour for that kind of questions.
+   - [DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning talks aobut RL models](https://arxiv.org/pdf/2501.12948) talks about how it performed reinforcement learning.
+   - How models are fine-tuned to get more accurate.
+   - Model was trying different ways to think through the same problem. This in turn increased the response length. But on the other hand, it increased its accuracy.
+   - [together.ai](https://api.together.xyz/signin?redirectUrl=%2Fplayground%2Fv2%2Fchat) playground hosts many different models.
 </details>
