@@ -1,4 +1,4 @@
-# All Learnings of May 2025
+# Basic Learnings
 
 <details>
    <summary><strong>AI for Everyone Course - by Andrew Ng on Coursera</strong></summary>
