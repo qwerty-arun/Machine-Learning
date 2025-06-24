@@ -376,4 +376,11 @@ B-->C[Context Window];
    - Rotate a matrix by 90 degrees.
    - Solve a linear system Ax = b using np.linalg.solve().
    - Create a Mandelbrot set using NumPy and matplotlib.
+
+   ## 24/6/25
+   ### Numpy Tutorial by Chai aur Code
+   - Learnt basic differencce between lists, arrays, vectors etc.
+   - Learnt Operations on Numpy Array
+   - Practiced with some Real World Data
+   - Stored an image in Matrix and converting image in dark mode.
 </details>
