@@ -69,5 +69,19 @@ B(f: model) --> C(y_hat)
 - b: bias
 
 ## Cost Function
+- Estimate : ${\hat{y}}^{(i)} = f_{w,b}(x^{(i)})$
+- $f_{w,b}(x^{(i)} = w * x^{(i)} + b$
+- Cost Function: $J(w,b) = \frac{1}{2m} * \sum_{i=1}^{m} (f_{w,b}(x^{(i)}) - y^{(i)})^2$  is also called the squared error cost function.
+- Our goal is to minimize `J(w,b)`
+- `J(w,b)` will be a 3D curve.
+- `J(w)` for `b=0` will be a parabola.
+- `b` v/s `w` graph will be a family of ellipses. Each ellipse is having a constant cost throughout. This graph is very similar to contours on a mountain.
+- At the very center of the family of ellipses, the cost is the lowest.
 
-- 
+# Gradient Descent
+- For any function in general
+- Start with some w and b
+- Keep changing to reduce `J`
+- Repeat until minimum is reached
+- `For linear regression of squared error cost function, we always end up with a bowl shape`.
+- For different w and b, when we apply the gradient descent, we may end up on totally different valleys.
