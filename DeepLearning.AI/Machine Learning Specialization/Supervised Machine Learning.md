@@ -85,3 +85,29 @@ B(f: model) --> C(y_hat)
 - Repeat until minimum is reached
 - `For linear regression of squared error cost function, we always end up with a bowl shape`.
 - For different w and b, when we apply the gradient descent, we may end up on totally different valleys.
+- Repeat:
+- $w = w - \alpha * \frac{\partial J(w,b)}{\partial w}$
+- $b = b - \alpha * \frac{\partial J(w,b)}{\partial b}$
+- If $\alpha$ is too small: Gradient descent will work, but it will be slow.
+- If $\alpha$ is too large: Gradient descent will overshoot and never reach minimum. Fail to converge.
+- `We can reach local minimum with fixed learning rates. Gradient descent will automatically take smaller steps.`
+
+# ALL EQUATIONS
+## Linear regression model:
+- $f_{w,b}(w, b) = w * x + b$
+
+## Cost Function:
+- $J(w, b) = \frac{1}{2m} * \sum_{i=1}^{m} (f_{w,b}(x^{(i)}) - y^{(i)})^2$
+
+## Gradient Descent Algorithm
+- Repeat till convergence:
+- $w = w - \alpha * \frac{\partial J(w,b)}{\partial w}$
+- where $\frac{\partial J(w,b)}{\partial w} = \frac{1}{m} * \sum_{i=1}^{m} (f_{w,b}(x^{(i)}) - y^{(i)}) * x^{(i)}$ 
+- $b = b - \alpha * \frac{\partial J(w,b)}{\partial b}$
+- where $\frac{\partial J(w,b)}{\partial b} = \frac{1}{m} * \sum_{i=1}^{m} (f_{w,b}(x^{(i)}) - y^{(i)})$
+
+- `for a squared error cost function => bowl shape. There is just one minimum.`
+- "Batch" GD => Each step of GD used all training examples
+
+# MULTIPLE LINEAR REGRESSION
+- 
